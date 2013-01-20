@@ -249,6 +249,7 @@ namespace Microsoft.Xna.Framework
         public virtual void BeforeInitialize()
         {
             IsActive = true;
+#if false
             if (this.Game.GraphicsDevice == null) 
             {
                 var graphicsDeviceManager = Game.Services.GetService(typeof(IGraphicsDeviceManager)) as IGraphicsDeviceManager;			   
@@ -257,6 +258,7 @@ namespace Microsoft.Xna.Framework
                 Window.TouchEnabled = true;
 #endif
             }
+#endif
         }
 
         /// <summary>

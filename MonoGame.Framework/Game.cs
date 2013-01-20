@@ -536,6 +536,10 @@ namespace Microsoft.Xna.Framework
 
         protected virtual void Initialize()
         {
+#if (WINDOWS && !WINRT) || LINUX
+            graphicsDeviceManager.CreateDevice();
+#endif
+
             // TODO: We shouldn't need to do this here.
             applyChanges(graphicsDeviceManager);
 
@@ -556,15 +560,6 @@ namespace Microsoft.Xna.Framework
 
             _graphicsDeviceService = (IGraphicsDeviceService)
                 Services.GetService(typeof(IGraphicsDeviceService));
-
-            // FIXME: If this test fails, is LoadContent ever called?  This
-            //        seems like a condition that warrants an exception more
-            //        than a silent failure.
-            if (_graphicsDeviceService != null &&
-                _graphicsDeviceService.GraphicsDevice != null)
-            {
-                LoadContent();
-            }
         }
 
         private static readonly Action<IDrawable, GameTime> DrawAction =
@@ -687,6 +682,17 @@ namespace Microsoft.Xna.Framework
             AssertNotDisposed();
             Platform.BeforeInitialize();
             Initialize();
+
+            // FIXME: If this test fails, is LoadContent ever called?  This
+            //        seems like a condition that warrants an exception more
+            //        than a silent failure.
+            if (_graphicsDeviceService != null &&
+                _graphicsDeviceService.GraphicsDevice != null)
+            {
+                LoadContent();
+            }
+            else
+                throw new Exception("Unable to load content!");
         }
 
 		internal void DoExiting()
