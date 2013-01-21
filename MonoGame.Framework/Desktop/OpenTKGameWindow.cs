@@ -294,8 +294,12 @@ namespace Microsoft.Xna.Framework
             Mouse.UpdateMouseInfo(window.Mouse);
 #endif
 
-            //Default no resizing
+            //Default no resizing except on linux
+#if LINUX
+            AllowUserResizing = true;
+#else
             AllowUserResizing = false;
+#endif
         }
 
         protected override void SetTitle(string title)

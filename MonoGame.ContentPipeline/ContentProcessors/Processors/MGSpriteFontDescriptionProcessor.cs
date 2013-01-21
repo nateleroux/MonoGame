@@ -16,14 +16,19 @@ namespace MonoGameContentProcessors.Processors
     {
         public override SpriteFontContent Process(FontDescription input, ContentProcessorContext context)
         {
-            // Fallback if we aren't buiding for iOS.
             var platform = ContentHelper.GetMonoGamePlatform();
-            if (platform != MonoGamePlatform.iOS)
-                return base.Process(input, context);
 
             SpriteFontContent content = base.Process(input, context);
             FieldInfo TextureField = typeof(SpriteFontContent).GetField("texture", BindingFlags.Instance | BindingFlags.NonPublic);
             Texture2DContent texture = (Texture2DContent)TextureField.GetValue(content);
+
+            // If we aren't building for iOS, export a standard argb texture
+            // This way, our fonts work on linux ;D
+            if (platform != MonoGamePlatform.iOS)
+            {
+                texture.ConvertBitmapType(typeof(PixelBitmapContent<Color>));
+                return content;
+            }
             
             // TODO: This is a very lame way of doing this as we're getting compression artifacts twice, but is the quickest way to get
             // Compressed fonts up and running. The SpriteFontContent/Processor contains a ton
