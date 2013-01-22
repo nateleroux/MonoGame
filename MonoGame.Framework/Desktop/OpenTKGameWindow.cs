@@ -283,8 +283,7 @@ namespace Microsoft.Xna.Framework
             keys = new List<Keys>();
 
             // Make the foreground context the current context
-            if (!GraphicsContext.CurrentContext.IsCurrent)
-                window.MakeCurrent();
+            window.MakeCurrent();
             
             // mouse
             // TODO review this when opentk 1.1 is released
